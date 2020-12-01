@@ -1,10 +1,26 @@
 require 'pry'
 
+holiday_hash = {
+  :winter => {
+    :christmas => ["Lights", "Wreath"],
+    :new_years => ["Party Hats"]
+  },
+  :summer => {
+    :fourth_of_july => ["Fireworks", "BBQ"]
+  },
+  :fall => {
+    :thanksgiving => ["Turkey"]
+  },
+  :spring => {
+    :memorial_day => ["BBQ"]
+  }
+}
+
 def second_supply_for_fourth_of_july(holiday_hash)
   # given that holiday_hash looks like this:
   # {
-  #   :winter => {
-  #     :christmas => ["Lights", "Wreath"],
+  #  SEASONS :winter => {
+  #     DAYS :christmas => SUPPLIES ["Lights", "Wreath"],
   #     :new_years => ["Party Hats"]
   #   },
   #   :summer => {
@@ -43,18 +59,9 @@ end
 def add_new_holiday_with_supplies(holiday_hash, season, holiday_name, supply_array)
   # code here
   # remember to return the updated hash
-  holiday_hash.each do |seasons_hash, days_hash|
-    if seasons_hash == season
-      seasons_hash << holiday_name
-      days_hash.each do |days, supplies_hash|
-        if days == holiday_name
-          days << supply_array
-        end
-      end
-    end
-  end
 
-    holiday_hash
+    holiday_hash[season][holiday_name] = supply_array
+
 end
 
 def all_winter_holiday_supplies(holiday_hash)
@@ -71,15 +78,36 @@ def all_supplies_in_holidays(holiday_hash)
   #   Fourth Of July: Fireworks, BBQ
   # etc.
 
+holiday_hash.each do |seasons, days_hash|
+  puts "#{seasons.to_s.capitalize}:"
+  days_hash.each do |day, supplies|
+    puts "  #{day.to_s.split("_").map {|x| x.capitalize}.join(" ")}: #{supplies.join(", ")}"
+  end
+end
+#   holiday_hash.each do |seasons, days_hash|
+#     print_season = seasons.to_s
+#     puts "#{print_season.capitalize}:"
+#     days_hash.each do |days, supplies|
+#       print_day = days.to_s
+#         print_supplies = supplies.join(", ")
+#         puts "#{print_day}: #{print_supplies}"
+#       end
+#     end
+#   end
 end
 
 def all_holidays_with_bbq(holiday_hash)
   # return an array of holiday names (as symbols) where supply lists
   # include the string "BBQ"
-  holiday_hash.collect do |seasons, days_hash|
-    days_hash.collect do |items_hash|
-        items_hash == "BBQ"
-    end
-  end
 
+  #map returns a new array
+  holiday_hash.map do |seasons, days_hash|
+    days_hash.map do |day, supplies|
+      if supplies.include?("BBQ")
+        day
+      end
+    end
+  end.flatten.compact
+  #flatten to get rid of nested array from map on map
+  #compact to get rid of nil values
 end
