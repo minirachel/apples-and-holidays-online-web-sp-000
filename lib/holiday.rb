@@ -107,5 +107,7 @@ def all_holidays_with_bbq(holiday_hash)
         day
       end
     end
-  end
+  end.flatten.compact
+  #flatten to get rid of nested array from map on map
+  #compact to get rid of nil values
 end
